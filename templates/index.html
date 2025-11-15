@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>News Transparency Checker</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            background: #f9f9f9;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #555;
+            margin-bottom: 25px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .loading-message {
+            margin-top: 20px;
+            font-style: italic;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>News Transparency Checker</h1>
+        <p>Enter any article URL to reveal sentiment, bias, and factual indicators.</p>
+
+        <form method="post" onsubmit="showLoading()">
+            <input type="text" name="url" placeholder="Paste article URL here..." required>
+            <button type="submit">Analyze</button>
+        </form>
+
+        <p class="loading-message" id="loadingMessage" style="display:none;">
+            Please wait a moment while your results are being generated...
+        </p>
+    </div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('loadingMessage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

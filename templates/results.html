@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analysis Results</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            background: #f9f9f9;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .score-interpretation {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 20px;
+            background: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .back-btn:hover {
+            background: #45a049;
+        }
+        .url {
+            font-weight: bold;
+            word-break: break-word;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Results for:</h1>
+    <p class="url">{{ url }}</p>
+
+    {% if results.error %}
+        <p class="error">{{ results.error }}</p>
+    {% else %}
+
+    <h2>Bias Score: {{ results.bias_score }}</h2>
+    <p class="score-interpretation">
+        {% if results.bias_score < 0.3 %}
+            Very low bias: The article is largely neutral.
+        {% elif results.bias_score < 0.6 %}
+            Moderate bias: Some subjectivity or opinion is present.
+        {% else %}
+            High bias: Article may be strongly opinionated.
+        {% endif %}
+    </p>
+
+    <h2>Fact Likelihood: {{ results.fact_likelihood_score }}</h2>
+    <p class="score-interpretation">
+        {% if results.fact_likelihood_score < 0.3 %}
+            Low factual content: Mostly narrative or opinion-based.
+        {% elif results.fact_likelihood_score < 0.6 %}
+            Balanced: Mixture of factual references and descriptive/narrative content.
+        {% else %}
+            High factual content: Primarily fact-based reporting.
+        {% endif %}
+    </p>
+
+    <h3>Sentiment</h3>
+    <ul>
+        <li>Score: {{ results.sentiment.score }}</li>
+        <li>Label: {{ results.sentiment.label }}</li>
+    </ul>
+
+    <h3>Emotions</h3>
+    <ul>
+        {% for key, value in results.emotion.items() %}
+            <li>{{ key | capitalize }}: {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Keywords</h3>
+    <ul>
+        {% for k in results.keywords %}
+            <li>{{ k.text }} (Relevance: {{ k.relevance }})</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Entities</h3>
+    <ul>
+        {% for e in results.entities %}
+            <li>{{ e.text }} — {{ e.type }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Perspectives</h3>
+    <ul>
+        <li><strong>Supporting:</strong> {{ results.perspectives.supporting_viewpoint }}</li>
+        <li><strong>Neutral:</strong> {{ results.perspectives.neutral_viewpoint }}</li>
+        <li><strong>Opposing:</strong> {{ results.perspectives.opposing_viewpoint }}</li>
+    </ul>
+
+    <h3>Quick Interpretation</h3>
+    <p class="score-interpretation">
+    {% set bias_text = "" %}
+    {% if results.bias_score < 0.3 %}
+        {% set bias_text = "very low bias, largely neutral" %}
+    {% elif results.bias_score < 0.6 %}
+        {% set bias_text = "moderate bias, some subjectivity present" %}
+    {% else %}
+        {% set bias_text = "high bias, strongly opinionated" %}
+    {% endif %}
+
+    {% set fact_text = "" %}
+    {% if results.fact_likelihood_score < 0.3 %}
+        {% set fact_text = "mostly narrative or opinion-based" %}
+    {% elif results.fact_likelihood_score < 0.6 %}
+        {% set fact_text = "a balance of factual and descriptive content" %}
+    {% else %}
+        {% set fact_text = "primarily fact-based reporting" %}
+    {% endif %}
+
+    {% set sentiment_text = "" %}
+    {% if results.sentiment.label == "positive" %}
+        {% set sentiment_text = "the tone is positive, emphasizing joy or enthusiasm" %}
+    {% elif results.sentiment.label == "negative" %}
+        {% set sentiment_text = "the tone is negative, expressing concern, sadness, or criticism" %}
+    {% else %}
+        {% set sentiment_text = "the tone is neutral or balanced" %}
+    {% endif %}
+
+    Overall, this article has {{ bias_text }}. It contains {{ fact_text }}, and {{ sentiment_text }}. Readers may interpret it differently depending on their perspective or familiarity with the topic.
+    </p>
+    {% endif %}
+
+    <a href="/" class="back-btn">Analyze another article</a>
+</div>
+
+</body>
+</html>

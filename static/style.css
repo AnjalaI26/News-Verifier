@@ -1,0 +1,33 @@
+body {
+    background: #fafafa;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 600px;
+    margin: auto;
+    padding: 30px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.url {
+    color: #444;
+    font-style: italic;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 20px;
+}
+
